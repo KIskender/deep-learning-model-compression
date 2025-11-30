@@ -1,0 +1,17 @@
+# Sanal Ortam
+.venv/
+
+# Python Derleme Dosyalari
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Veri Setleri
+data/
+datasets/
+
+# Gecici Dosyalar
+*.log
+.DS_Store
+temp.p
+temp_nlp.p
