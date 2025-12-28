@@ -11,7 +11,7 @@ import time
 
 # --- AYARLAR ---
 NUM_WORKERS = 0 
-EPOCH_SAYISI = 50
+EPOCH_SAYISI = 20
 BATCH_SIZE = 64
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # FILENAME = os.path.join(BASE_DIR, "models", "teacher_resnet18.pth")

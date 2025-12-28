@@ -5,14 +5,14 @@ import numpy as np
 models = ['Teacher\n(ResNet18)', 'Pruned\n(ResNet18)', 'Quantized\n(ResNet18)', 'Student\n(Distilled)', 'Combo\n(Dist.+Quant.)']
 
 # Boyutlar (MB)
-sizes = [40.00, 30.86, 10.78, 2.38, 0.62]
+sizes = [39.70, 30.85, 10.78, 2.38, 0.62]
 
 # Doğruluklar (%)
 # (Teacher Baseline: 84.10, Pruned: 83.63, Quantized Teacher: 84.30, Student FP32: 83.88, Student INT8: 83.50)
-accuracies = [84.10, 83.63, 84.30, 83.88, 83.50]
+accuracies = [81.30, 81.36, 79.00, 80.50, 80.40]
 
 # Hızlar (ms) - CPU Latency
-latencies = [18.40, 18.00, 4.50, 0.75, 0.94]
+latencies = [5.50, 11.37, 3.27, 0.90, 0.99]
 
 # --- GRAFİK AYARLARI ---
 plt.style.use('ggplot')
@@ -101,3 +101,42 @@ plt.grid(True, linestyle='--', alpha=0.7)
 
 plt.savefig('results/grafik_4_tradeoff.png', dpi=300)
 print("Grafik 4 (Trade-off) oluşturuldu.")
+
+# 5. BOYUT - DOĞRULUK ÖDÜNLEŞİMİ (SCATTER PLOT)
+plt.figure(figsize=(12, 8))
+
+# Eksen sınırlarını dinamik ayarlar
+y_min, y_max = min(accuracies), max(accuracies)
+plt.ylim(y_min - 0.5, y_max + 0.5) 
+plt.xlim(min(sizes) - 2, max(sizes) + 5)
+
+# Metin kaydırma ayarları (x, y) - Üst üste binmeyi önlemek için
+text_offsets_size = [
+    (0, 0.15),    # Teacher: Yukarı
+    (0, -0.30),   # Pruned: Aşağı (Teacher ile karışmasın)
+    (0, 0.15),    # Quantized: Yukarı
+    (0, -0.30),   # Student: Aşağı
+    (0, 0.15)     # Combo: Yukarı
+]
+
+for i, model in enumerate(models):
+    # Balon boyutu: Latency değerine göre (hızı temsil eder)
+    plt.scatter(sizes[i], accuracies[i], s=(latencies[i]*80)+100, 
+                color=colors[i], label=model, alpha=0.7, edgecolors='black')
+    
+    # Yazıyı kaydırarak yaz
+    plt.text(sizes[i] + text_offsets_size[i][0], 
+             accuracies[i] + text_offsets_size[i][1], 
+             model, 
+             fontsize=10, 
+             ha='center', 
+             fontweight='bold',
+             bbox=dict(facecolor='white', alpha=0.6, edgecolor='none', pad=1))
+
+plt.title('Boyut vs Doğruluk Ödünleşimi (Trade-off)\n(Balon büyüklüğü = Çıkarım Süresi)', fontsize=16)
+plt.xlabel('Model Boyutu (MB) <-- Daha Küçük', fontsize=12)
+plt.ylabel('Doğruluk (%) <-- Daha Zeki', fontsize=12)
+plt.grid(True, linestyle='--', alpha=0.7)
+
+plt.savefig('results/grafik_5_boyut_dogruluk.png', dpi=300)
+print("Grafik 5 (Boyut vs Doğruluk Trade-off) oluşturuldu.")

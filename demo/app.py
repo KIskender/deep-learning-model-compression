@@ -11,9 +11,9 @@ import copy
 import io
 
 # --- SAYFA AYARLARI ---
-st.set_page_config(page_title="DeepCompress Demo", layout="wide", page_icon="🚀")
+st.set_page_config(page_title="DeepCompress Demo", layout="wide")
 
-st.title("🚀 Model Sıkıştırma ve Hızlandırma Projesi")
+st.title("Model Sıkıştırma ve Hızlandırma Projesi")
 st.markdown("""
 Bu uygulama, **Görüntü İşleme** ve **Doğal Dil İşleme (NLP)** modellerinin sıkıştırma öncesi ve sonrası 
 performanslarını (Hız, Boyut, Doğruluk) karşılaştırmaktadır.
@@ -61,7 +61,7 @@ class QuantizedLightCNN(nn.Module):
 @st.cache_resource
 def load_vision_models():
     # Model yolları (Klasör yapısına uygun olarak)
-    TEACHER_PATH = "models/resnet18_cifar10_10epoch.pth"
+    TEACHER_PATH = "models/teacher_resnet18.pth"
     STUDENT_PATH = "models/student_distilled.pth"
 
     # 1. TEACHER YÜKLE
@@ -133,7 +133,7 @@ def predict_text(model, tokenizer, text):
 # ==========================================
 
 # Sekmeler oluştur
-tab1, tab2 = st.tabs(["📷 Görüntü İşleme (Vision)", "📝 Doğal Dil İşleme (NLP)"])
+tab1, tab2 = st.tabs(["Görüntü İşleme (Vision)", "Doğal Dil İşleme (NLP)"])
 
 # --- TAB 1: GÖRÜNTÜ ---
 with tab1:
@@ -147,7 +147,7 @@ with tab1:
         col1, col2 = st.columns(2)
         image = Image.open(uploaded_file).convert('RGB')
         with col1:
-            st.image(image, caption='Yüklenen Resim', use_container_width=True)
+            st.image(image, caption='Yüklenen Resim', width=300)
             
         # Hazırlık
         transform = transforms.Compose([
@@ -163,16 +163,16 @@ with tab1:
             
             c1, c2 = st.columns(2)
             with c1:
-                st.info("👨‍🏫 TEACHER (ResNet-18)")
+                st.info("TEACHER (ResNet-18)")
                 st.metric("Tahmin", f"{CLASSES[t_pred]}", f"%{t_conf*100:.1f} Güven")
-                st.write(f"⏱️ Süre: **{t_time:.2f} ms**")
-                st.write("💾 Boyut: **40.0 MB**")
+                st.write(f"Süre: **{t_time:.2f} ms**")
+                st.write("Boyut: **40.0 MB**")
             with c2:
-                st.success("👶 STUDENT (Combo)")
+                st.success("STUDENT (Combo)")
                 st.metric("Tahmin", f"{CLASSES[s_pred]}", f"%{s_conf*100:.1f} Güven")
-                st.write(f"⏱️ Süre: **{s_time:.2f} ms**")
-                st.write("💾 Boyut: **0.62 MB**")
-                st.caption(f"🚀 {t_time/s_time:.1f}x Hızlı | 64x Küçük")
+                st.write(f"Süre: **{s_time:.2f} ms**")
+                st.write("Boyut: **0.62 MB**")
+                st.caption(f"{t_time/s_time:.1f}x Hızlı | 64x Küçük")
 
 # --- TAB 2: NLP ---
 with tab2:
@@ -180,7 +180,7 @@ with tab2:
     st.write("İngilizce bir film yorumu yazın, model duygu durumunu (Pozitif/Negatif) tahmin etsin.")
     
     tokenizer, nlp_fp32, nlp_int8 = load_nlp_models()
-    LABELS = ["NEGATİF 😞", "POZİTİF 😊"]
+    LABELS = ["NEGATİF", "POZİTİF"]
     
     text_input = st.text_area("Yorumunuzu girin:", "This movie was absolutely fantastic! The acting was great.")
     
@@ -193,13 +193,13 @@ with tab2:
             
             c1, c2 = st.columns(2)
             with c1:
-                st.info("📦 BASELINE (DistilBERT FP32)")
+                st.info("BASELINE (DistilBERT FP32)")
                 st.metric("Sonuç", LABELS[b_pred], f"%{b_conf*100:.1f}")
-                st.write(f"⏱️ Süre: **{b_time:.2f} ms**")
-                st.write("💾 Boyut: **255 MB**")
+                st.write(f"Süre: **{b_time:.2f} ms**")
+                st.write("Boyut: **255 MB**")
             with c2:
-                st.success("⚡ QUANTIZED (DistilBERT INT8)")
+                st.success("QUANTIZED (DistilBERT INT8)")
                 st.metric("Sonuç", LABELS[q_pred], f"%{q_conf*100:.1f}")
-                st.write(f"⏱️ Süre: **{q_time:.2f} ms**")
-                st.write("💾 Boyut: **132 MB**")
-                st.caption(f"🚀 {b_time/q_time:.1f}x Hızlı | 2x Küçük")
+                st.write(f"Süre: **{q_time:.2f} ms**")
+                st.write("Boyut: **132 MB**")
+                st.caption(f"{b_time/q_time:.1f}x Hızlı | 2x Küçük")

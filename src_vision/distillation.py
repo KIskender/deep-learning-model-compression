@@ -15,7 +15,7 @@ TEACHER_PATH = "models/teacher_resnet18.pth"
 STUDENT_PATH = "models/student_distilled.pth"
 
 # Hiperparametreler
-EPOCH_SAYISI = 50     # Öğrencinin öğrenme süresi
+EPOCH_SAYISI = 20     # Öğrencinin öğrenme süresi
 TEMPERATURE = 4       # Öğretmenin bilgisini yumuşatma katsayısı (Genelde 2-5 arası)
 ALPHA = 0.7           # Öğretmene ne kadar güveneceği (0.7 = %70 Öğretmen, %30 Etiketler)
 BATCH_SIZE = 64
