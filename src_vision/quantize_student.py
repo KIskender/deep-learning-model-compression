@@ -10,7 +10,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # --- AYARLAR ---
-device = torch.device("cpu") # Quantization CPU işidir
+device = torch.device("cpu")
 STUDENT_PATH = "models/student_distilled.pth"
 BACKEND = "fbgemm"
 
@@ -46,10 +46,7 @@ class LightCNN(nn.Module):
 
     def forward(self, x):
         x = self.features(x)
-        # .view() yerine .reshape() kullanıyoruz. 
-        # Quantization sonrası bellek yapısı değiştiği için reshape güvenlidir.
         x = x.reshape(-1, 128 * 4 * 4) 
-        # -----------------------
         x = self.classifier(x)
         return x
 

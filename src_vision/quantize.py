@@ -3,7 +3,6 @@ import torch.nn as nn
 import torchvision
 import torchvision.transforms as transforms
 from torchvision import models
-# Özel Quantization kütüphanesini dahil ediyoruz
 from torchvision.models.quantization import resnet18 as quantized_resnet18
 import os
 import time
@@ -16,7 +15,7 @@ warnings.filterwarnings("ignore")
 # --- AYARLAR ---
 device = torch.device("cpu") 
 BASELINE_PATH = "models/teacher_resnet18.pth"
-BACKEND = "fbgemm" # Windows/Intel CPU için en uygun motor
+BACKEND = "fbgemm"
 
 print(f"--- Quantization İşlemi Başlıyor ---")
 print(f"İşlem Cihazı: {device}")
@@ -71,7 +70,6 @@ if not os.path.exists(BASELINE_PATH):
 state_dict = torch.load(BASELINE_PATH, map_location=device)
 
 # B. Şimdi "Quantization-Ready" bir ResNet oluşturuyoruz
-# Bu model, 'add' işlemleri için FloatFunctional kullanır, hata vermez.
 model_to_quantize = quantized_resnet18(pretrained=False, quantize=False)
 model_to_quantize.fc = nn.Linear(model_to_quantize.fc.in_features, 10)
 
@@ -80,8 +78,7 @@ model_to_quantize.load_state_dict(state_dict)
 model_to_quantize.to(device)
 model_to_quantize.eval()
 
-# Baseline Performansını Ölç
-# (Modeli henüz quantize etmedik, sadece yapısını değiştirdik, performansı aynı olmalı)
+# Baseline Performansını Ölçer
 acc_fp32, speed_fp32 = evaluate_model(model_to_quantize, testloader, "BASELINE (FP32)", limit=1000)
 size_fp32 = get_size(model_to_quantize)
 print(f"   -> Boyut: {size_fp32:.2f} MB")

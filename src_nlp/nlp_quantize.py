@@ -4,7 +4,6 @@ import os
 import time
 
 # --- AYARLAR ---
-# NLP modellerinde "Dynamic Quantization" CPU üzerinde çok etkilidir.
 device = torch.device("cpu") 
 
 print("--- NLP Model Sıkıştırma (DistilBERT) Başlıyor ---")
@@ -23,7 +22,6 @@ def print_size_of_model(model, label=""):
     torch.save(model.state_dict(), filename)
     size = os.path.getsize(filename) / (1024 * 1024)
     
-    # DÜZELTME BURADA: Dosyayı silemezse hata vermesin, geçsin.
     try:
         os.remove(filename)
     except OSError:

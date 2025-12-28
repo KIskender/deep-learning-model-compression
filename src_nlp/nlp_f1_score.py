@@ -6,7 +6,7 @@ import time
 import os
 import warnings
 
-# Gereksiz uyarıları kapat
+# Gereksiz uyarıları kapatır
 warnings.filterwarnings("ignore")
 
 # --- AYARLAR ---
@@ -23,7 +23,7 @@ try:
     labels = dataset["label"] 
 except Exception as e:
     print(f"İnternet/Dataset hatası: {e}")
-    # Hata olursa dummy veri ile devam et (Kodu patlatma)
+
     texts = ["This movie is great", "I hate this film"] * 50
     labels = [1, 0] * 50
 
@@ -52,7 +52,7 @@ def evaluate_performance(model, texts, true_labels, name="Model"):
     
     # Metrikler
     acc = accuracy_score(true_labels, preds)
-    # average='weighted' ekledik ki 0 çıkmasın
+    # average='weighted' eklendi ki 0 çıkmasın
     f1 = f1_score(true_labels, preds, average='weighted') 
     avg_latency = (duration / len(texts)) * 1000 
     
@@ -61,7 +61,7 @@ def evaluate_performance(model, texts, true_labels, name="Model"):
     torch.save(model.state_dict(), temp_filename)
     size_mb = os.path.getsize(temp_filename) / (1024 * 1024)
     
-    # Dosya silme işlemini güvenli hale getirdik
+    # Dosya silme işlemini güvenli hale getirildi
     try:
         os.remove(temp_filename)
     except PermissionError:

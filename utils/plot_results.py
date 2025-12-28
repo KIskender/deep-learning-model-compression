@@ -1,14 +1,13 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-# --- PROJE SONUÇ VERİLERİ) ---
+# --- PROJE SONUÇ VERİLERİ ---
 models = ['Teacher\n(ResNet18)', 'Pruned\n(ResNet18)', 'Quantized\n(ResNet18)', 'Student\n(Distilled)', 'Combo\n(Dist.+Quant.)']
 
 # Boyutlar (MB)
 sizes = [39.70, 30.85, 10.78, 2.38, 0.62]
 
 # Doğruluklar (%)
-# (Teacher Baseline: 84.10, Pruned: 83.63, Quantized Teacher: 84.30, Student FP32: 83.88, Student INT8: 83.50)
 accuracies = [81.30, 81.36, 79.00, 80.50, 80.40]
 
 # Hızlar (ms) - CPU Latency

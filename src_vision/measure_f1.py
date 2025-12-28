@@ -18,7 +18,7 @@ STUDENT_PATH = "models/student_distilled.pth"
 print("--- F1 Skor ve Detaylı Performans Ölçümü ---")
 
 # --- VERİ SETİ ---
-# F1 ölçümü için tüm test setini (10.000 resim) kullanacağız
+# F1 ölçümü için tüm test setini (10.000 resim) kullanır
 transform_test = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
@@ -44,7 +44,7 @@ class LightCNN(nn.Module):
         )
     def forward(self, x):
         x = self.features(x)
-        x = x.reshape(-1, 128 * 4 * 4) # .view yerine .reshape kullandık
+        x = x.reshape(-1, 128 * 4 * 4)
         x = self.classifier(x)
         return x
 

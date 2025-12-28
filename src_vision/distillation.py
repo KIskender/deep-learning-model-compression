@@ -38,7 +38,6 @@ def load_teacher():
     return model
 
 # B. STUDENT (Öğrenci) - Basit ve Küçük Bir CNN
-# ResNet-18'den çok daha az katmanlı, kendi tasarımım
 class LightCNN(nn.Module):
     def __init__(self):
         super(LightCNN, self).__init__()
